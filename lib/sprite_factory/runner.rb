@@ -55,7 +55,7 @@ module SpriteFactory
 
       css = []
       css << style_comment(header) unless nocomments?                       # header comment
-      css << style(selector, css_url, images, &block)                       # generated styles
+      css << style(selector, css_url, images, max, &block)                  # generated styles
       css << IO.read(custom_style_file) if File.exists?(custom_style_file)  # custom styles
       css = css.join("\n")
 
@@ -223,10 +223,10 @@ module SpriteFactory
 
     #----------------------------------------------------------------------------
 
-    def style(selector, url, images, &block)
+    def style(selector, url, images, max, &block)
       defaults = Style.generate(style_name, selector, url, images) # must call, even if custom block is given, because it stashes generated css style into image[:style] attributes
       if block_given?
-        yield images.inject({}) {|h,i| h[i[:name].to_sym] = i; h} # provide custom rule builder a hash by image name
+        yield images.inject({}) {|h,i| h[i[:name].to_sym] = i; h}, max # provide custom rule builder a hash by image name
       else
         defaults
       end
