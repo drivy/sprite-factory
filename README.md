@@ -248,10 +248,11 @@ Customizing the entire CSS output
 
 If you want **complete** control over the generated styles, you can pass a block to the `run!` method.
 
-The block will be provided with information about each image, including the generated css attributes. 
+The block will be provided with information about each image, including the generated css attributes.
+It will also receive informations about the final sprite dimensions.
 Whatever content the block returns will be inserted into the generated css file.
 
-    SpriteFactory.run!('images/timer') do |images|
+    SpriteFactory.run!('images/timer') do |images, sprite|
       rules = []
       rules << "div.running img.button { cursor: pointer; #{images[:running][:style]} }"
       rules << "div.stopped img.button { cursor: pointer; #{images[:stopped][:style]} }"
@@ -272,6 +273,11 @@ value is a hash of image metadata that includes the following:
  * `:height` - the image height
 
 >> NOTE: the image coords can differ form the css sprite coords when padding/margin or fixed width/height options are specified)
+
+The `sprite` argument is a hash that includes the following:
+
+ * `:width`  - the generated sprite width
+ * `:height` - the generated sprite height
 
 Using sprite-factory with the Rails asset pipeline
 ==================================================
